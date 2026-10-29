@@ -55,6 +55,25 @@ price from `founder/pricing.md` or `founder/pitch.md` if those exist.
 buyer panel ran, use its buy rate and first-month purchases to sanity-check the
 ramp (`founder/panel/results.md`), and say how you did it.
 
+**Three cases, not one.** Run the slow, expected and good volume
+(`--volume 0.6`, `1.0`, `1.2` or the user's own range) and base the note on the
+slow case. If the business only works in the good case, say so first.
+
+**Never size sales from a share of a population** ("1% of KL"). Volume comes
+from a count of real people who pass or visit, times a stated capture rate.
+
+### In Malaysia
+
+Work in RM (the tool prints `$`; say the figures are RM). Add the costs that
+plans forget: rental deposit and advance, renovation of a bare unit, licences
+and food handler courses, employer EPF, SOCSO and EIS on top of wages, delivery
+app commission on delivery orders (model those separately), e wallet and card
+fees, wastage, and **the owner's own salary** (show the result with and without
+it). Look up the current minimum wage and contribution rates; note any change
+already announced for a later date and run both if year one crosses it. Service
+tax for F&B only applies above its turnover threshold, so check before adding
+it. If `founder/malaysia.md` exists, use its numbers and calendar.
+
 ## Step 2: run it
 
 ```bash

@@ -90,9 +90,15 @@ def verdict(d, min_buy_rate=0.25):
     raw = _read(os.path.join(d, "panel", "results.json"))
     if raw:
         panel = json.loads(raw)
-        r = panel["buy_rate"]
-        checks.append((r >= min_buy_rate, "%d of %d simulated buyers buy (%.0f%%, the bar is %.0f%%)." % (
-            panel["buys"], panel["answered"], r * 100, min_buy_rate * 100)))
+        if panel.get("sure_answers"):
+            # count only buyers who said yes AND definitely: simulated buyers lean agreeable
+            r = panel["firm_buy_rate"]
+            checks.append((r >= min_buy_rate, "%d of %d simulated buyers are firm buyers (yes and definitely, %.0f%%, the bar"
+                           " is %.0f%%)." % (panel["firm_buys"], panel["answered"], r * 100, min_buy_rate * 100)))
+        else:
+            r = panel["buy_rate"]
+            checks.append((r >= min_buy_rate, "%d of %d simulated buyers buy (%.0f%%, the bar is %.0f%%)." % (
+                panel["buys"], panel["answered"], r * 100, min_buy_rate * 100)))
     if numbers is None:
         v = "Incomplete"
     elif all(ok for ok, _ in checks):

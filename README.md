@@ -6,7 +6,7 @@ signup, no API key, nothing to connect.
 `skills/founder-board` `skills/founder-marketing` `skills/founder-cfo`
 `skills/founder-consumer` `skills/founder-launch` `skills/founder-pricing`
 `skills/founder-offer` `skills/founder-competitors` `skills/founder-brand`
-`skills/founder-ops` `skills/founder-plan`
+`skills/founder-ops` `skills/founder-plan` `skills/founder-malaysia`
 
 One of them is your board of directors, trained on the frameworks of Alex
 Hormozi, Peter Thiel and Steve Jobs. One is your marketing director. One is your
@@ -16,6 +16,51 @@ through 100 buyer scenarios.
 
 So you know how to launch, how to market and how to actually make money, before
 you spend thousands of dollars finding out the hard way.
+
+## Malaysian edition
+
+This fork adds **`skills/founder-malaysia`**, for ordinary people starting a
+small business anywhere in Malaysia: a stall, a kedai, a cafe, a home bakery, a
+shoplot. It works on its own as one file, in ChatGPT or Claude, with no setup.
+
+What it adds:
+
+- **Any state, not just KL.** It finds the right local council (PBT) for the
+  exact address, then the licences to check: SSM (or the state process in Sabah
+  and Sarawak), premise and signboard licence, Bomba, food handler training and
+  typhoid jab, JAKIM halal, service tax and e Invoice thresholds, minimum wage,
+  EPF, SOCSO and EIS. Rates are looked up live from official sites, never
+  typed from memory.
+- **Realistic numbers.** Every number is tagged as your figure, checked (with a
+  source) or an estimate. Money is shown in RM in three cases (slow, expected,
+  good) and the verdict is based on the slow one. No "1% of KL" maths:
+  customers are counted from a real street count at the spot.
+- **Honest AI customers.** Simulated buyers must say how sure they are, and only
+  firm buyers (yes and definitely) count. The plan's verdict uses that number.
+- **A real test before the lease.** Pre orders on WhatsApp, a pasar malam or
+  bazaar stall, delivery only first, with a pass mark agreed in advance.
+- **A verdict that cannot be hyped:** Stop, Not yet, Promising on paper, Ready
+  for a small real test, or Go (only after real customers paid).
+
+**Use it without any tech:** download
+[`skills/founder-malaysia/SKILL.md`](skills/founder-malaysia/SKILL.md), attach
+it at the start of a chat in Claude or ChatGPT, and type:
+
+```
+Follow this file. I want to open a tea shop in Brickfields, KL.
+```
+
+**Install the whole pack from this fork** (Claude):
+
+```
+https://github.com/agilenr/founder-skill
+
+install skill
+```
+
+The other skills also gained Malaysia notes (council, licences, RM costs,
+local competitors, local buyer profiles: see
+`skills/founder-consumer/customer.my.example.json`).
 
 ## Install
 
@@ -168,7 +213,7 @@ confirms it.
 ```
 skills/founder-board/        SKILL.md, lenses.md
 skills/founder-competitors/  SKILL.md
-skills/founder-consumer/     SKILL.md, panel.py, customer.example.json, pitch.example.md
+skills/founder-consumer/     SKILL.md, panel.py, customer.example.json, customer.my.example.json, pitch.example.md
 skills/founder-pricing/      SKILL.md, van_westendorp.py
 skills/founder-offer/        SKILL.md
 skills/founder-cfo/          SKILL.md, unit_economics.py, example.json
@@ -177,6 +222,7 @@ skills/founder-brand/        SKILL.md
 skills/founder-ops/          SKILL.md
 skills/founder-launch/       SKILL.md
 skills/founder-plan/         SKILL.md, compile.py
+skills/founder-malaysia/     SKILL.md (Malaysian edition, works on its own)
 tests/                       the tests for every tool
 ```
 
@@ -190,6 +236,10 @@ Made by Jake Schincariol, [opusjake.ai](https://opusjake.ai). Siblings:
 [X](https://github.com/Jakeschincariol/x-agent-skill),
 [LinkedIn](https://github.com/Jakeschincariol/linkedin-agent-skill),
 [Instagram](https://github.com/Jakeschincariol/instagram-agent-skill).
+
+Malaysian edition by Agilen (Edupreneur Academy and Kai Solution), forked from
+[Jakeschincariol/founder-skill](https://github.com/Jakeschincariol/founder-skill)
+under its MIT license.
 
 ## License
 

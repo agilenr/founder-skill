@@ -42,6 +42,13 @@ Write `founder/customer.json` (shape: `customer.example.json` in this folder):
 - `objections`: the 4 to 8 doubts this kind of buyer really has.
 - `habits` (optional): everyday context lines that make a buyer concrete.
 
+Optional fields: `currency` (default `$`), `income_period` (`year` by
+default, or `month` for monthly household income, which is how most Malaysians
+think about it), and `names` (a list of first names that fit the area). For a
+Malaysian business see `customer.my.example.json`: RM, monthly household
+income, local buying habits and local names. Never assume an area's ethnic or
+religious mix from its name; ask the user.
+
 Ground it in something real. Use what the user knows about their customers, and
 if `/founder-competitors` ran, the complaints in `founder/competitors.md`. If the
 user has real customer data (interviews, reviews, survey answers), prefer it to
@@ -94,7 +101,9 @@ file, so suggest accept-edits mode (Shift+Tab) for the run.
 
 `PANEL tally` writes `founder/panel/results.md` and `results.json`. Give the user:
 
-1. The headline: "40 buy · 60 pass" and the buy rate.
+1. The headline: "40 buy · 60 pass" and the buy rate, then the **firm buyers**
+   (yes and definitely). The firm number is the one to plan on; the plan's
+   verdict uses it.
 2. Who buys and who doesn't: the segment and behaviour rows that differ most.
 3. Why they pass: the top three reasons with one quote each, as written.
 4. What would flip a no: the most repeated answers.
@@ -114,8 +123,8 @@ before signing anything. Do not present panel quotes as customer testimonials.
 `panel.py` fills the card into a fixed template (see `BRIEF` in the script): who
 the buyer is (name, age, segment, income, buying behaviour, a habit, the doubt
 that comes to mind), the pitch word for word, an instruction not to be agreeable
-and not to invent facts, and the exact JSON to write: buys, purchases in the first
-month, a reason code, the reason in their own voice, their main objection, what
+and not to invent facts, and the exact JSON to write: buys, how sure (definitely,
+probably, maybe), purchases in the first month, a reason code, the reason in their own voice, their main objection, what
 would change their mind, and four price answers (too cheap, a bargain, getting
 expensive, too expensive). Never edit a brief for one buyer.
 

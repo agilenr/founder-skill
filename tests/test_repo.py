@@ -6,7 +6,8 @@ import unittest
 from _load import ROOT, SKILLS_DIR
 
 SKILLS = ["founder-board", "founder-marketing", "founder-cfo", "founder-consumer", "founder-launch",
-          "founder-pricing", "founder-offer", "founder-competitors", "founder-brand", "founder-ops", "founder-plan"]
+          "founder-pricing", "founder-offer", "founder-competitors", "founder-brand", "founder-ops", "founder-plan",
+          "founder-malaysia"]
 ABOUT = ("Eleven free Claude skills that test a business before you launch it: a board trained on Hormozi, "
          "Thiel and Jobs, a marketing director, a CFO, and a consumer panel of 100 buyer agents. Free, MIT.")
 
@@ -30,7 +31,7 @@ def text_files():
 
 
 class Repo(unittest.TestCase):
-    def test_eleven_skill_folders(self):
+    def test_skill_folders(self):
         found = sorted(d for d in os.listdir(SKILLS_DIR) if os.path.isfile(os.path.join(SKILLS_DIR, d, "SKILL.md")))
         self.assertEqual(found, sorted(SKILLS))
 
@@ -81,7 +82,8 @@ class Repo(unittest.TestCase):
             self.assertIn("`skills/%s`" % s, readme)
 
     def test_examples_parse(self):
-        for rel in ("founder-cfo/example.json", "founder-consumer/customer.example.json"):
+        for rel in ("founder-cfo/example.json", "founder-consumer/customer.example.json",
+                    "founder-consumer/customer.my.example.json"):
             with open(os.path.join(SKILLS_DIR, rel), encoding="utf-8") as fh:
                 json.load(fh)
 

@@ -88,10 +88,12 @@ def deal(customer, n=100, seed=7):
         behs += [b] * k
     rng.shuffle(segs)
     rng.shuffle(behs)
-    names = FIRST_NAMES[:]
+    pool = list(customer.get("names") or FIRST_NAMES)
+    names = pool[:]
     rng.shuffle(names)
     while len(names) < n:
-        names += ["%s %d" % (x, len(names) // len(FIRST_NAMES) + 1) for x in FIRST_NAMES]
+        names += ["%s %d" % (x, len(names) // len(pool) + 1) for x in pool]
+    monthly = customer.get("income_period", "year") == "month"
     objections = customer["objections"]
     habits = customer.get("habits") or []
     cards = []
@@ -103,7 +105,7 @@ def deal(customer, n=100, seed=7):
             "name": names[i],
             "age": rng.randint(int(age[0]), int(age[1])),
             "segment": s["name"],
-            "income": int(round(rng.uniform(lo, hi), -3)),
+            "income": int(round(rng.uniform(lo, hi), -2 if monthly else -3)),
             "behaviour": b["name"],
             "behaviour_how": b.get("how", ""),
             "objection": objections[rng.randrange(len(objections))],
@@ -161,7 +163,7 @@ def load_state(d):
 BRIEF = """You are a simulated buyer on a consumer panel. A founder wants to know, before spending any money, whether real people like you would buy. Your answer is only useful if it is honest: most people do not buy most things, and a polite yes is worse than a clear no.
 
 === WHO YOU ARE ===
-{name}, {age}. {segment}. You earn about ${income:,} a year.
+{name}, {age}. {segment}. {income_line}
 How you buy: {behaviour}. {behaviour_how}
 {habit_line}The first thing that comes to mind when you hear an offer like this: "{objection}"
 You are one of these people: {target}.
@@ -172,11 +174,13 @@ You are one of these people: {target}.
 === END ===
 
 Decide as {name} would, with {name}'s money, habits and doubts, in a normal week. Do not be agreeable. Do not invent facts about the business beyond what is written above.
+A polite "sure, I would try it one day" is not a yes. Only say you buy if {name} would really spend the money in the first month, and say honestly how sure you are.
 
 Create the file {out} with your file-writing tool (do not just print the answer in your reply) containing ONLY this JSON, no markdown fence, nothing else:
 {{
   "id": "{id}",
   "buys": true or false,
+  "how_sure": one of "definitely" / "probably" / "maybe" (how sure you are of your buys answer),
   "purchases_first_month": how many times you would buy in the first month (0 if you would not buy),
   "reason_code": one of {reasons},
   "reason": "why, in one or two sentences, in your own voice",
@@ -190,6 +194,22 @@ Create the file {out} with your file-writing tool (do not just print the answer 
 """
 
 
+SURE = ["definitely", "probably", "maybe"]
+
+
+def currency(customer):
+    return customer.get("currency", "$")
+
+
+def income_line(customer, income):
+    """'You earn about $52,000 a year.' or, for a monthly profile, 'Your household earns about RM4,200 a month.'"""
+    cur = currency(customer)
+    if customer.get("income_period", "year") == "month":
+        who = customer.get("income_label", "Your household earns")
+        return "%s about %s%s a month." % (who, cur, "{:,}".format(income))
+    return "You earn about %s%s a year." % (cur, "{:,}".format(income))
+
+
 def write_briefs(d, wave=WAVE):
     state, cards = load_state(d)
     target = state["customer"]["target"]
@@ -199,6 +219,7 @@ def write_briefs(d, wave=WAVE):
         if _answer_ok(out, c["id"]) is None:
             continue
         brief = BRIEF.format(pitch=state["pitch"], target=target, out=os.path.abspath(out),
+                             income_line=income_line(state["customer"], c["income"]),
                              habit_line=("Your day: %s.\n" % c["habit"]) if c.get("habit") else "",
                              reasons=" / ".join(REASONS), **c)
         bp = _path(d, "briefs", c["id"] + ".md")
@@ -224,6 +245,8 @@ def _answer_ok(path, pid):
         return "id is %r, expected %s" % (a.get("id"), pid)
     if not isinstance(a.get("buys"), bool):
         return "'buys' must be true or false"
+    if "how_sure" in a and a["how_sure"] not in SURE:
+        return "how_sure %r is not one of %s" % (a["how_sure"], ", ".join(SURE))
     if a.get("reason_code") not in REASONS:
         return "reason_code %r is not one of %s" % (a.get("reason_code"), ", ".join(REASONS))
     return None
@@ -294,11 +317,13 @@ def tally(d):
         return sorted(((k, len(v), _rate(v)) for k, v in out.items()), key=lambda t: -t[2])
 
     # income in thirds of the dealt range, so the bands mean the same thing every run
+    cur = currency(state["customer"])
     incomes = sorted(r["income"] for r in rows)
     cut1, cut2 = incomes[len(incomes) // 3], incomes[2 * len(incomes) // 3]
+    f = lambda v: cur + "{:,}".format(v)
     for r in rows:
-        r["income_band"] = ("under $%s" % "{:,}".format(cut1)) if r["income"] < cut1 else (
-            ("$%s and up" % "{:,}".format(cut2)) if r["income"] >= cut2 else "$%s to $%s" % ("{:,}".format(cut1), "{:,}".format(cut2)))
+        r["income_band"] = ("under %s" % f(cut1)) if r["income"] < cut1 else (
+            ("%s and up" % f(cut2)) if r["income"] >= cut2 else "%s to %s" % (f(cut1), f(cut2)))
 
     no = [r for r in rows if not r["buys"]]
     yes = [r for r in rows if r["buys"]]
@@ -317,6 +342,10 @@ def tally(d):
         "business": state["customer"]["business"], "seed": state["seed"], "dealt": len(cards),
         "answered": len(rows), "skipped": skipped, "buys": len(yes), "passes": len(no),
         "buy_rate": len(yes) / len(rows),
+        # firm buyers: said yes AND "definitely". Simulated buyers lean agreeable, so this is the number to plan on
+        "sure_answers": sum(1 for r in rows if r.get("how_sure") in SURE),
+        "firm_buys": sum(1 for r in yes if r.get("how_sure") == "definitely"),
+        "firm_buy_rate": sum(1 for r in yes if r.get("how_sure") == "definitely") / len(rows),
         "by_segment": group("segment"), "by_behaviour": group("behaviour"), "by_income": group("income_band"),
         "why_not": [(k, len(v), [r["reason"] for r in v[:2]], [r["id"] for r in v[:2]]) for k, v in reasons(no)],
         "why_yes": [(k, len(v), [r["reason"] for r in v[:2]], [r["id"] for r in v[:2]]) for k, v in reasons(yes)],
@@ -333,6 +362,10 @@ def results_md(res):
     L = ["# Buyer panel: %s" % res["business"], ""]
     L.append("**%d buy · %d pass** (%s buy) out of %d simulated buyers. Seed %s, so the same cards can be dealt again."
              % (res["buys"], res["passes"], pct(res["buy_rate"]), res["answered"], res["seed"]))
+    if res.get("sure_answers"):
+        L.append("")
+        L.append("**Firm buyers: %d** (%s) said yes *and* definitely. Plan on this number, not the headline, and still"
+                 " treat it as a ceiling until real people pay." % (res["firm_buys"], pct(res["firm_buy_rate"])))
     if res["skipped"]:
         L.append("")
         L.append("%d of %d buyers have no valid answer and are left out: %s." % (
