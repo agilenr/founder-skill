@@ -58,6 +58,22 @@ insurance), each with the official page to confirm it. Say plainly that rules
 differ by place and change, and the user must confirm each with the authority or a
 professional. Not legal advice.
 
+### In Malaysia
+
+If `founder/malaysia.md` exists (written by `/founder-malaysia`), use its
+council and checklist. Otherwise find the local council (PBT) for the exact
+address first, since premise and signboard licences, fees and timelines differ
+by council (DBKL in KL, MBPP or MBSP in Penang, Majlis Bandaraya Seremban, MBJB
+in Johor Bahru, and so on). Check, each with the official page or `VERIFY`:
+SSM registration (Sabah and Sarawak use their own state process for sole
+proprietors), LHDN tax file, the unit's zoning and CCC or CF, Bomba fire
+requirements, and for food: food handler training and typhoid vaccination for
+every food handler, and JAKIM halal certification if the business will call
+itself halal. For staff: the current minimum wage and the employer share of
+EPF, SOCSO and EIS, looked up, never from memory. Put the Malaysian calendar
+(Ramadan, festive weeks, school holidays, east coast monsoon) into the rota and
+the risk register.
+
 ## Step 7: risk register
 
 The ten things most likely to go wrong (a supplier runs out, a key person is sick,

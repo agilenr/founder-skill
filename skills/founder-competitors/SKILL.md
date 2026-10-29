@@ -41,6 +41,14 @@ Aim for 5 to 10 direct and indirect, plus the main substitutes. For a local
 business, search the map for the exact area; for online, search how a buyer would
 ("best <thing> for <who>", "<thing> alternative").
 
+### In Malaysia
+
+Search Google Maps for the exact taman or street, then GrabFood, foodpanda and
+ShopeeFood for menu prices, and TikTok, Instagram and the area's Facebook groups
+for what people say. Always include the cheap everyday options buyers already
+use (the mamak, the kopitiam, chain kiosks, convenience stores, and making it at
+home) as indirect competitors and substitutes. Prices in RM.
+
 ## Step 2: the facts
 
 One row per competitor in `founder/competitors.csv`:

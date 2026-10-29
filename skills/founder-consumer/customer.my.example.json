@@ -1,0 +1,45 @@
+{
+  "business": "Teh Seri (an illustrative example only: a small tea and kuih stall in a Seremban shoplot area. Replace every line with what the user tells you)",
+  "target": "Office workers, shop staff and nearby residents who buy a drink and a snack on weekdays",
+  "where": "Seremban, Negeri Sembilan",
+  "currency": "RM",
+  "income_period": "month",
+  "income_label": "Your household earns",
+  "age": [20, 60],
+  "segments": [
+    {"name": "Lower income household", "share": 0.40, "income": [2500, 5000]},
+    {"name": "Middle income household", "share": 0.45, "income": [5000, 11000]},
+    {"name": "Higher income household", "share": 0.15, "income": [11000, 20000]}
+  ],
+  "behaviours": [
+    {"name": "Mamak regular", "share": 0.22, "how": "Has teh tarik at the same mamak most days and knows the price by heart."},
+    {"name": "Grab orderer", "share": 0.15, "how": "Orders drinks on a delivery app to the office, only with a voucher."},
+    {"name": "Month end saver", "share": 0.18, "how": "Spends freely after payday, cuts every extra the week before it."},
+    {"name": "TikTok follower", "share": 0.12, "how": "Tries a new drink spot when it trends, rarely goes back."},
+    {"name": "Halal strict", "share": 0.13, "how": "Only buys where there is a halal certificate on the wall."},
+    {"name": "Family weekend", "share": 0.10, "how": "Buys for the whole family on Saturday, never alone on weekdays."},
+    {"name": "Brings own drink", "share": 0.10, "how": "Brings a flask from home to save money."}
+  ],
+  "objections": [
+    "The mamak is cheaper and open 24 hours",
+    "RM6 for tea is too much",
+    "Is it halal certified?",
+    "No parking nearby",
+    "I already have my usual place",
+    "I would try it once, not every day"
+  ],
+  "habits": [
+    "you work in a shoplot office nearby",
+    "you send your children to school in the morning",
+    "you get paid at the end of the month",
+    "you drive and hate looking for parking"
+  ],
+  "names": [
+    "Aiman", "Nurul", "Hafiz", "Siti", "Faiz", "Aisyah", "Amir", "Farah", "Danial", "Izzati", "Syafiq", "Hidayah",
+    "Hakim", "Liyana", "Irfan", "Balqis", "Rizal", "Amira", "Zul", "Nadia", "Wei Ling", "Jun Hao", "Mei Xin",
+    "Kok Wai", "Hui Min", "Chee Keong", "Xin Yi", "Boon Hock", "Pei Shan", "Jia Hui", "Kah Mun", "Wen Jie",
+    "Kavitha", "Ravi", "Priya", "Suresh", "Deepa", "Ganesh", "Thivya", "Kumar", "Meena", "Arun", "Shalini",
+    "Vimal", "Jenny", "Daniel", "Grace", "Michael", "Joanna", "Melvin", "Ah Seng", "Puteri", "Azlan", "Yasmin",
+    "Ling", "Tharani", "Sharifah", "Khairul", "Elaine", "Jason"
+  ]
+}

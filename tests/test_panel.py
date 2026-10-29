@@ -33,6 +33,17 @@ class Deal(unittest.TestCase):
             self.assertTrue(seg["income"][0] - 500 <= c["income"] <= seg["income"][1] + 500)
             self.assertIn(c["objection"], customer()["objections"])
 
+    def test_malaysian_profile_uses_rm_monthly_and_local_names(self):
+        with open(example("founder-consumer", "customer.my.example.json"), encoding="utf-8") as fh:
+            my = json.load(fh)
+        cards = panel.deal(my, 100, 5)
+        names = {c["name"].rsplit(" ", 1)[0] if c["name"][-1].isdigit() else c["name"] for c in cards}
+        self.assertTrue(names <= set(my["names"]))
+        line = panel.income_line(my, cards[0]["income"])
+        self.assertTrue(line.startswith("Your household earns about RM"), line)
+        self.assertTrue(line.endswith("a month."), line)
+        self.assertIn("a year", panel.income_line(customer(), 52000))
+
     def test_bad_profile_is_refused(self):
         c = customer()
         del c["objections"]
@@ -87,6 +98,17 @@ class Flow(unittest.TestCase):
         text = panel.results_md(res)
         self.assertIn("**8 buy · 11 pass**", text)
         self.assertIn("not customers", text)
+
+    def test_firm_buyers_count_only_definitely(self):
+        for i in range(1, 21):
+            sure = "definitely" if i <= 3 else ("probably" if i <= 8 else "maybe")
+            self.answer("P%03d" % i, i <= 8, "quality" if i <= 8 else "price", how_sure=sure)
+        res = panel.tally(self.d)
+        self.assertEqual((res["buys"], res["firm_buys"]), (8, 3))
+        self.assertAlmostEqual(res["firm_buy_rate"], 0.15)
+        self.assertIn("Firm buyers: 3", panel.results_md(res))
+        self.answer("P001", True, "quality", how_sure="sort of")
+        self.assertIn("P001", dict(panel.check(self.d)))
 
     def test_save_files_a_printed_answer_and_refuses_junk(self):
         reply = 'Here is my answer:\n```json\n{"id": "P002", "buys": false, "reason_code": "price", "reason": "too much"}\n```'

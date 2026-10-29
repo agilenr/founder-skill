@@ -52,6 +52,17 @@ class Compile(unittest.TestCase):
         self.assertEqual(v, "Not yet")
         self.assertIn("✗ 12 of 100 simulated buyers buy", text)
 
+    def test_firm_buyers_decide_when_present(self):
+        # 40 say yes, but only 10 are sure: the plan must judge on the 10
+        self.numbers()
+        os.makedirs(os.path.join(self.d, "panel"), exist_ok=True)
+        with open(os.path.join(self.d, "panel", "results.json"), "w") as fh:
+            json.dump({"buys": 40, "passes": 60, "answered": 100, "buy_rate": 0.40,
+                       "sure_answers": 100, "firm_buys": 10, "firm_buy_rate": 0.10}, fh)
+        v, text = plan.compile_plan(self.d)
+        self.assertEqual(v, "Not yet")
+        self.assertIn("10 of 100 simulated buyers are firm buyers", text)
+
     def test_losing_money_means_not_yet(self):
         self.numbers(price=3.00)
         v, _ = plan.compile_plan(self.d)
